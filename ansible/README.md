@@ -11,7 +11,7 @@ where ANSIBLE_USER is the name of the user that will run ansible.
 ## How to run ansible container
 
 ```bash
-docker run -t -d -w /etc/ansible --name ansible ansible
+docker run -t -d -v $PWD/ansible-workspace:/etc/ansible -w /etc/ansible --name ansible ansible
 ```
 
 ## Test that ansible is correctly installed
@@ -28,4 +28,12 @@ ansible [core 2.14.2]
   python version = 3.10.10 (main, Feb  9 2023, 02:08:14) [GCC 12.2.1 20220924] (/usr/bin/python3)
   jinja version = 3.1.2
   libyaml = False
+```
+
+## Run ansible examples
+
+1. Copy files to servers
+
+```ash
+/etc/ansible $ ansible-playbook playbooks/copy_hosts_nsswitch.yml
 ```
