@@ -1,6 +1,6 @@
 ---
 - name: Copy /etc/hosts and /etc/nsswitch.conf files to servers. Playbook 1
-  hosts: localhost
+  hosts: all
   become: true
   tasks:
     - name: Copy /etc/hosts

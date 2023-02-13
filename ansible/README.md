@@ -8,11 +8,19 @@ docker build -t ansible --build-arg ANSIBLE_USER=ansible .
 
 where ANSIBLE_USER is the name of the user that will run ansible.
 
+## Create ansible network for ansible and other servers
+
+```bash
+docker network create ansible-net
+```
+
 ## How to run ansible container
 
 ```bash
-docker run -t -d -v $PWD/ansible-workspace:/etc/ansible -w /etc/ansible --name ansible ansible
+docker run -t -d --net ansible-net -v $PWD/ansible-examples:/etc/ansible -w /etc/ansible --name ansible ansible
 ```
+
+
 
 ## Test that ansible is correctly installed
 
