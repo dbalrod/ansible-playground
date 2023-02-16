@@ -2,3 +2,6 @@ localhost ansible_connection=local ansible_user=ansible
 
 [alpines]
 alpine ansible_user=alpine
+
+[ubuntus]
+ubuntu ansible_user=ansible
