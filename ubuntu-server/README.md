@@ -10,6 +10,16 @@ docker build --build-arg UBUNTU_USER=ansible -t ubuntu-server .
 
 ```bash
 docker run -it -d --net ansible-net -h ubuntu --name ubuntu-server ubuntu-server
+```
+
+## How to add ansible's public key
+
+```bash
 docker exec -t ubuntu-server sh -c "mkdir -p /home/ansible/.ssh && echo '$(docker exec -t ansible cat /home/ansible/.ssh/ssh_host_ed25519_key.pub)' > /home/ansible/.ssh/authorized_keys"
+```
+
+## How to log into ubuntu-server
+
+```bash
 docker exec -it -u ansible -w /home/ansible ubuntu-server bash
 ```

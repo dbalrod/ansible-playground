@@ -3,5 +3,12 @@ localhost ansible_connection=local ansible_user=ansible
 [alpines]
 alpine ansible_user=alpine
 
+[apt:children]
+debians
+ubuntus
+
 [ubuntus]
 ubuntu ansible_user=ansible
+
+[debians]
+debian ansible_user=ansible
