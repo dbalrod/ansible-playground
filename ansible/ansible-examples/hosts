@@ -12,3 +12,6 @@ ubuntu ansible_user=ansible
 
 [debians]
 debian ansible_user=ansible
+
+[centoses]
+centos ansible_user=ansible
