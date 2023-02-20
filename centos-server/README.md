@@ -1,13 +1,13 @@
 # CENTOS7
 
-## How to build centos image
+## How to build centos image
 
 ```bash
 export USER=ansible
 docker build --build-arg CENTOS_USER=$USER -t centos-server .
 ```
 
-## How to run centos container
+## How to run centos container
 
 ```bash
 docker run -it -d --net ansible-net -h centos --name centos-server --privileged -e container=docker -v /sys/fs/cgroup:/sys/fs/cgroup centos-server
@@ -19,7 +19,7 @@ docker run -it -d --net ansible-net -h centos --name centos-server --privileged 
 docker exec -t centos-server sh -c "mkdir -p /home/$USER/.ssh && echo '$(docker exec -t ansible cat /home/ansible/.ssh/ssh_host_ed25519_key.pub)' > /home/$USER/.ssh/authorized_keys"
 ```
 
-## How to log into centos container
+## How to log into centos container
 
 ```bash
 docker exec -it -u $USER -w /home/$USER centos-server bash

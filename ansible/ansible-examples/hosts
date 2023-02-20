@@ -13,5 +13,12 @@ ubuntu ansible_user=ansible
 [debians]
 debian ansible_user=ansible
 
+[yum:children]
+centoses
+rockies
+
 [centoses]
 centos ansible_user=ansible
+
+[rockies]
+rockylinux ansible_user=ansible

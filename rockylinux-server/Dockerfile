@@ -1,5 +1,5 @@
-FROM centos:7
-ARG CENTOS_USER
+FROM rockylinux:8
+ARG ROCKY_USER
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN yum -y update && yum clean all \
     && yum -y install systemd \
@@ -12,15 +12,13 @@ RUN yum -y update && yum clean all \
     rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
     rm -f /lib/systemd/system/basic.target.wants/*;\
     rm -f /lib/systemd/system/anaconda.target.wants/* \
-    && yum install -y openssh-clients openssh-server sudo python2 epel-release \
-    && yum update -y \
-    && yum install -y python-pip \
-    && pip2 install --no-cache-dir pexpect==3.3 \
+    && [ -f /run/nologin ] && rm -f /run/nologin \
+    && yum install -y openssh-clients openssh-server sudo python3 \
     && yum clean all \
     && mkdir /run/sshd \
     && ssh-keygen -A \
-    && adduser ${CENTOS_USER} -u "5000" \
-    && echo "${CENTOS_USER}:$(date +%s | sha256sum | base64 | head -c 32)"|chpasswd \
-    && echo "${CENTOS_USER} ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/${CENTOS_USER}
+    && adduser ${ROCKY_USER} -u "5000" \
+    && echo "${ROCKY_USER}:$(date +%s | sha256sum | base64 | head -c 32)"|chpasswd \
+    && echo "${ROCKY_USER} ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/${ROCKY_USER}
 VOLUME [ "/sys/fs/cgroup" ]
 CMD ["/usr/sbin/sshd", "-D", "-e"] 
