@@ -19,7 +19,7 @@ docker run -it -d --net ansible-net -h centos --name centos-server --privileged 
 docker exec -t centos-server sh -c "mkdir -p /home/$USER/.ssh && echo '$(docker exec -t ansible cat /home/ansible/.ssh/ssh_host_ed25519_key.pub)' > /home/$USER/.ssh/authorized_keys"
 ```
 
-## How to log into centos container
+## How to login into centos container
 
 ```bash
 docker exec -it -u $USER -w /home/$USER centos-server bash

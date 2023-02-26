@@ -16,9 +16,13 @@ debian ansible_user=ansible
 [yum:children]
 centoses
 rockies
+rhels
 
 [centoses]
 centos ansible_user=ansible
 
 [rockies]
 rockylinux ansible_user=ansible
+
+[rhels]
+rhel ansible_user=ansible
