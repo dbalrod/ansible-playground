@@ -1,7 +1,7 @@
 localhost ansible_connection=local ansible_user=ansible
 
 [alpines]
-alpine ansible_user=alpine
+alpine ansible_user=ansible
 
 [apt:children]
 debians
@@ -26,3 +26,8 @@ rockylinux ansible_user=ansible
 
 [rhels]
 rhel ansible_user=ansible
+
+# Containers
+
+[dockers]
+dind ansible_user=ansible

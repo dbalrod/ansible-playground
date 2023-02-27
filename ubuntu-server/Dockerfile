@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 ARG UBUNTU_USER
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update \ 
-    && apt-get install --no-install-recommends -y ssh sudo python3 \
+    && apt-get install --no-install-recommends -y ssh sudo python3 python3-pip \
     && apt-get clean \
     && mkdir /run/sshd \
     && rm -rf /var/lib/apt/lists/* \

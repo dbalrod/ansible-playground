@@ -3,7 +3,7 @@ FROM debian:11
 ARG DEBIAN_USER
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update \
-    && apt-get install --no-install-recommends --fix-missing -y ssh sudo python3 python3-apt \
+    && apt-get install --no-install-recommends --fix-missing -y ssh sudo python3 python3-pip python3-apt \
     && apt-get clean \
     && mkdir /run/sshd \
     && rm -rf /var/lib/apt/lists/* \
