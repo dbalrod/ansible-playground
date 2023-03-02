@@ -10,7 +10,7 @@ docker build --build-arg CENTOS_USER=$USER -t centos-server .
 ## How to run centos container
 
 ```bash
-docker run -it -d --net ansible-net -h centos --name centos-server --privileged -e container=docker -v /sys/fs/cgroup:/sys/fs/cgroup centos-server
+docker run -it -d --net ansible-net -h centos --name centos-server --cap-add SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup --cgroupns=host centos-server
 ```
 
 ## How to add ansible's public key

@@ -10,7 +10,7 @@ docker build --build-arg ROCKY_USER=$USER -t rockylinux-server .
 ## How to run rockylinux container
 
 ```bash
-docker run -it -d --net ansible-net -h rockylinux --name rockylinux-server --privileged -v /sys/fs/cgroup:/sys/fs/cgroup rockylinux-server
+docker run -it -d --net ansible-net -h rockylinux --name rockylinux-server --cap-add SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup --cgroupns=host rockylinux-server
 ```
 
 ## How to add ansible's public key

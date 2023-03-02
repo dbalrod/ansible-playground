@@ -1,0 +1,13 @@
+{# Comentario, clase de templates #}
+Hello from {{ ansible_fqdn }}
+
+{% if ansible_distribution == "RedHat" %}
+This is a RedHat server
+{% endif %}
+
+Users list:
+{% for user in users_list %}
+{{ user }}
+{% endfor %}
+
+End of template

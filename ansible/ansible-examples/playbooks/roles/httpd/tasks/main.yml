@@ -1,0 +1,11 @@
+- name: Install httpd
+  ansible.builtin.include_tasks: install_httpd.yml
+
+- name: Copy index.html file
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+    mode: 0640
+    owner: apache
+    group: apache
+  notify: Restart_httpd
