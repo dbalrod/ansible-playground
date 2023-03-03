@@ -1,0 +1,39 @@
+- name: Copy files in directory playbook
+  gather_facts: false
+  hosts: all
+  tasks:
+    - name: Ensures /tmp/source dir exists
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0750
+      loop:
+        - /tmp/source
+        - /tmp/dest1
+        - /tmp/dest2
+        - /tmp/dest3
+    - name: Create multiple files
+      ansible.builtin.copy:
+        dest: "/tmp/source/{{ item }}"
+        content: |
+          It is a sample file named {{ item }}
+        mode: 0640
+      with_items:
+        - Test1.txt
+        - Test2.txt
+        - Test3.txt
+
+    - name: Copy files to multiple directories
+      ansible.builtin.copy:
+        src: /tmp/source/
+        dest: "{{ item.dest }}"
+        mode: 0640
+      with_items:
+        - { dest: '/tmp/dest1' }
+        - { dest: '/tmp/dest2' }
+
+    - name: Copy files from a directory
+      ansible.builtin.copy:
+        src: /tmp/source/
+        dest: /tmp/dest3/
+        mode: 0640
