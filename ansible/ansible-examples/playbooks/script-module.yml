@@ -4,7 +4,7 @@
   hosts: all 
   tasks:
     - name: "Run a local script on remote servers"
-      ansible.builtin.script: files/script-module/uname.sh
+      ansible.builtin.script: files/uname/uname.sh
       register: script_out
 
     - name: "Print script output"
