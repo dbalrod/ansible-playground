@@ -1,0 +1,9 @@
+- name: Testing Vault
+  hosts: localhost
+  tasks:
+# Example1: ansible-playbook playbooks/vault.yml -e "@playbooks/files/vault/secret-not-encrypted.yml"
+# Example2: ansible-playbook playbooks/vault.yml -e "@playbooks/files/vault/secret-encrypted.yml" --ask-vault-pass
+# Note: secret-encrypted.yml file's password is password
+    - name: Get password from vault
+      debug: 
+        var: keyvalue

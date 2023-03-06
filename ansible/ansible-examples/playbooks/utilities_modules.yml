@@ -1,0 +1,40 @@
+- hosts: yum
+  become: True
+  tasks:
+    - name: Including vars from file
+      include_vars: vars/include_variables.yml
+    - name: Including a role
+      include_role: 
+        name: httpd
+    - name: Showing hostname and FQDN
+      debug:  
+        msg: "Hostname {{ ansible_hostname }} y FQDN {{ ansible_fqdn }}"
+
+    - name: Install uptime command
+      ansible.builtin.yum:
+        name:
+          -  procps-ng
+        state: present
+    - name: Registering output of command uptime
+      command: uptime
+      register: output
+      changed_when: output.rc == 0
+    - name: Showing output of registered command
+      debug: 
+        var: output
+    - name: Pause task for 2 seconds maximum
+      pause:
+        prompt: "Check the APP"
+        seconds: 2
+        
+      # TEST: ansible-playbook utilities_modules.yml --extra-vars '{"check_number": 110}'
+    - name: Check if number is between 0 and 100
+      assert:
+        msg: "Nunber should be between 0 and 100"
+        that:
+          - check_number <= 100
+          - check_number >  0
+    - name: Fail task if number is not 10
+      fail: 
+        msg: "Number is not 10"
+      when: check_number != 10
