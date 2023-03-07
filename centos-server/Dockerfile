@@ -6,7 +6,6 @@ RUN sed -i -e "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/CentOS-* \
     && yum -y update \
     && yum install -y openssh-clients openssh-server sudo python3 epel-release \
     && yum install -y python3-pip \
-    && pip3 install --no-cache-dir pexpect==3.3 \
     && yum clean all \
     && mkdir /run/sshd \
     && ssh-keygen -A \

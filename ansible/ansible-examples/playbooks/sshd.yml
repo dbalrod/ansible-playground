@@ -1,0 +1,29 @@
+---
+- name: Update sshd config (sshd_config)
+  hosts: all:!localhost:!apk:!centoses
+  tasks:
+    - name: Copy config file
+      ansible.builtin.copy: 
+        src: files/sshd/sshd_config 
+        dest: /etc/ssh/sshd_config 
+        mode: 0644 
+        owner: ansible 
+        group: ansible
+        backup: true
+      become: true
+      notify: 
+        - restart_ssh
+        - restart_sshd
+  handlers:
+    - name: restart_ssh
+      ansible.builtin.service: 
+        name: ssh
+        state: restarted
+      when: inventory_hostname in groups["apt"] 
+    - name: restart_sshd
+      ansible.builtin.service: 
+        name: sshd
+        state: restarted
+      become: true
+      when: inventory_hostname in (groups["rhels"] + groups["rockies"]) | unique
+...

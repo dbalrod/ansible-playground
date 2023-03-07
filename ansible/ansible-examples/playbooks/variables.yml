@@ -1,7 +1,34 @@
-- name: Create file and fill it using a template and variables
-  hosts: all
+- name: Working with variables
+  hosts: localhost
+  connection: local
   vars: 
     - myip: "1.2.3.4"
+    - mylist: ["apache2","mariadb","php5"]
+    - mylist_inlines:
+      - apache2
+      - mariadb
+      - php5
+    - mydict: {web: apache2, bd: mariadb, script: php5}
+    - mydict_inlines: 
+        web: apache2
+        bd: mariadb
+        script: php5
+    - mytext: |
+        first line
+        second line
+        third line
+    - mylongline: >
+        start of line
+        text
+        end of line
   tasks:
-    - name: Create hosts file
-      template: src=templates/variables/hosts.j2 dest=/tmp/hosts
+    - debug: var=myip
+    - debug: var=mylist
+    - debug: var=mylist_inlines
+    - debug: var=mydict
+    - debug: var=mydict.web    
+    - debug: var=mydict_inlines
+    - debug: var=mydict_inlines.web
+    - debug: var=mydict_inlines['web']
+    - debug: var=mytext
+    - debug: var=mylongline

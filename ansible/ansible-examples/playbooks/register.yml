@@ -1,0 +1,9 @@
+- name: Register varible
+  hosts: all
+  tasks:
+    - name: Execute command and register output
+      command: cat /etc/hosts
+      register: output
+    - name: Show variable
+      debug: 
+        var: output.stdout_lines
