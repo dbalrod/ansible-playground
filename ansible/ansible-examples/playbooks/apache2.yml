@@ -1,5 +1,5 @@
-- name: Apache2 modules and config
-  hosts: apt
+- name: Apache2 installation modules and config
+  hosts: apt:!ubuntu # TODO: Test on ubuntu
   become: true
   tasks:
     - name: Install apache2 and supervisor

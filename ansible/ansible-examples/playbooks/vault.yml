@@ -4,6 +4,8 @@
 # Example1: ansible-playbook playbooks/vault.yml -e "@playbooks/files/vault/secret-not-encrypted.yml"
 # Example2: ansible-playbook playbooks/vault.yml -e "@playbooks/files/vault/secret-encrypted.yml" --ask-vault-pass
 # Note: secret-encrypted.yml file's password is password
+# Example3: export ANSIBLE_VAULT_PASSWORD_FILE=./playbooks/files/vault/.vault_pass
+#           ansible-playbook playbooks/vault.yml -e "@playbooks/files/vault/secret-encrypted.yml"
     - name: Get password from vault
       debug: 
         var: keyvalue

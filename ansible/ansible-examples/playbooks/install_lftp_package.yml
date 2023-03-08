@@ -1,0 +1,9 @@
+- name: Install lftp package
+  hosts: apt:!ubuntu # FIXME: Run playbook on ubuntu successfully
+  become: true
+  tasks:
+    - name: Update cache in debian family servers
+      ansible.builtin.apt: 
+        update_cache: true
+        name: lftp 
+        state: present
