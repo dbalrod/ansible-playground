@@ -53,7 +53,7 @@
         regexp: "^%wheel"
 
   handlers:
-    - name: restart_journald
+    - name: restart_journald # FIXME: It is only working on Red Hat family servers
       become: true
       ansible.builtin.service: 
         name: systemd-journald 
