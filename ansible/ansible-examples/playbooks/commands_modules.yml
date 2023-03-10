@@ -15,8 +15,10 @@
         chdir: /tmp
       register: myoutput
       changed_when: myoutput.rc != 0
-    - name: Execute command
-      command: uname -a removes=/tmp/ejecutar
+    - name: Execute command if /tmp/run_command file does not exist
+      command: uname -a creates=/tmp/run_command
+    - name: Execute command if /tmp/run_command file exists
+      command: uname -a removes=/tmp/run_command
     - name: Install pexpect
       ansible.builtin.pip:
         name: pexpect
