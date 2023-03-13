@@ -1,0 +1,29 @@
+---
+- name: Copy /etc/hosts and /etc/nsswitch.conf files to servers. Playbook 1
+  hosts: all
+  become: true
+  tasks:
+    - name: Copy /etc/hosts
+      ansible.builtin.copy:
+        src: /etc/hosts
+        dest: /etc/hosts-ansible
+        mode: 0400
+    - name: Copy /etc/nsswitch.conf
+      ansible.builtin.copy:
+        src: /etc/nsswitch.conf
+        dest: /etc/nsswitch-ansible.conf
+        mode: 0400
+- name: Copy /etc/hosts and /etc/nsswitch.conf files to servers. Playbook 2
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Copy /etc/hosts
+      ansible.builtin.copy:
+        src: /etc/hosts
+        dest: /etc/hosts-ansible
+        mode: 0400
+    - name: Copy /etc/nsswitch.conf
+      ansible.builtin.copy:
+        src: /etc/nsswitch.conf
+        dest: /etc/nsswitch-ansible.conf
+        mode: 0400

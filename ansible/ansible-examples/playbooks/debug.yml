@@ -1,0 +1,10 @@
+- name: Debug example
+  hosts: localhost
+  tasks:
+    - name: Change task verbosity to 2 (-vv)
+      ansible.builtin.debug:
+        var: ansible_host
+        verbosity: 2
+    - name: Showing debugged var
+      ansible.builtin.debug:
+        msg: "My host is {{ ansible_host }}"

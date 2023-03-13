@@ -1,0 +1,26 @@
+# Examples:
+# ansible-playbook tags.yml --tag pro
+# ansible-playbook tags.yml --tag dev
+# ansible-playbook tags.yml --tag qa
+# ansible-playbook tags.yml --tag pre
+# ansible-playbook tags.yml
+
+- name: Tags example
+  hosts: localhost
+  tasks:
+    - name: PRO tag task
+      ansible.builtin.debug:
+        msg: "PRO tag task"
+      tags: pro
+    - name: DEV tag task
+      ansible.builtin.debug:
+        msg: "DEV tag task"
+      tags: dev
+    - name: Multiple tags task
+      ansible.builtin.debug:
+        msg: "Multiple tags task"
+      tags: [qa, pro]
+    - name: Always tag task
+      ansible.builtin.debug:
+        msg: "This task is always run"
+      tags: always

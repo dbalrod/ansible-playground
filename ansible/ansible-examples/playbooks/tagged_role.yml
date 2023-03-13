@@ -1,0 +1,12 @@
+---
+- name: Install httpd
+  hosts: yum
+  become: true
+  become_user: root
+  roles:
+  # This role will only be executed if tag is test when running ansible-playbook
+  # Example: ansible-playbook etiquetas_rol.yml --tags test
+  # If tag is not test, rol will not be executed
+  # Example: ansible-playbook etiquetas_rol.yml --tags
+    - role: httpd
+      tags: test
