@@ -2,40 +2,41 @@
   hosts: yum # TODO: Test in all servers (-v /run/systemd/journal/socket:/run/systemd/journal/socket)
   tasks:
     - name: Create a file with the defined content
-      ansible.builtin.copy: 
-        content: "This is a test" 
-        dest: /tmp/test 
+      ansible.builtin.copy:
+        content: "This is a test"
+        dest: /tmp/test
         backup: true
+        mode: 0644
 
     - name: Delete file
-      ansible.builtin.file: 
-        path: "/tmp/prueba" 
+      ansible.builtin.file:
+        path: "/tmp/prueba"
         state: absent
 
     - name: Ensure that a directory exists
       become: true
-      ansible.builtin.file: 
-        path: "/var/log/journal" 
-        state: directory 
+      ansible.builtin.file:
+        path: "/var/log/journal"
+        state: directory
         owner: root
-        mode: 2755
-      notify: restart_journald
-    
+        mode: "2755" # TODO: Test if mode as string ("2755" instead of 2755) works
+      notify: Restart_journald
+
     - name: Module stat
-      ansible.builtin.stat: 
+      ansible.builtin.stat:
         path: /etc/
       register: data
 
     - name: Show a message if previous path exists
-      ansible.builtin.debug: 
+      ansible.builtin.debug:
         msg: "This is a directory"
       when: data.stat.isdir
 
     - name: Get file from server
-      ansible.builtin.fetch: 
-        src: /etc/hosts 
-        dest: /tmp/backup/ 
-        flat: false  
+      ansible.builtin.fetch:
+        src: /etc/hosts
+        dest: /tmp/backup/
+        flat: false
 
     - name: Disable core dumps debugging in sudo
       become: true
@@ -43,18 +44,18 @@
         path: /etc/sudo.conf
         regexp: 'Set disable_coredump[\s]+false'
         line: 'Set disable_coredump true'
-        backup: yes
+        backup: true
 
     - name: Remove group from sudoers
       become: true
-      ansible.builtin.lineinfile: 
-        path: /etc/sudoers 
-        state: absent 
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: absent
         regexp: "^%wheel"
 
   handlers:
-    - name: restart_journald # FIXME: It is only working on Red Hat family servers
+    - name: Restart_journald # FIXME: It is only working on Red Hat family servers
       become: true
-      ansible.builtin.service: 
-        name: systemd-journald 
-        state: restarted 
+      ansible.builtin.service:
+        name: systemd-journald
+        state: restarted

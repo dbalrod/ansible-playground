@@ -1,16 +1,19 @@
-- hosts: localhost
+- name: Notifications examples
+  hosts: localhost
   connection: localhost
   vars:
-    - notification_channel: "mail" # FIXME Test Slack and mail
-    - email_address: "omrfloppy@gmail.com"
-    - pushbullet_api_key: "o.2FbEyW4nyV2MHN2qdJcaqTIbNs509VfQ"
-    - pushbullet_device: "Realme"
-    - slack_token: "TAGRYDVGR/BAHLKF9SR/Xp9bqbsqLnqB5BmJxwigdUNo"
-    - slack_channel: "#general"
+    notification_channel: "mail" # FIXME Test Slack and mail
+    email_address: "omrfloppy@gmail.com"
+    pushbullet_api_key: "o.2FbEyW4nyV2MHN2qdJcaqTIbNs509VfQ"
+    pushbullet_device: "Realme"
+    slack_token: "TAGRYDVGR/BAHLKF9SR/Xp9bqbsqLnqB5BmJxwigdUNo"
+    slack_channel: "#general"
   tasks:
-  # TODO: docker run -d --rm --init --env POSTFIX_SMTP_HELO_NAME=localhost --env=POSTFIX_MYORIGIN=localhost --env=POSTFIX_MYHOSTNAME=localhost --name postfix --net ansible-net postfix:latest
+# TODO: docker run -d --rm --init \
+#       --env POSTFIX_SMTP_HELO_NAME=localhost --env=POSTFIX_MYORIGIN=localhost --env=POSTFIX_MYHOSTNAME=localhost
+#       --name postfix --net ansible-net postfix:latest
     - name: "Notification by email"
-      mail:
+      community.general.mail:
         host: postfix
         to: "{{ email_address }}"
         sender: root@localhost
@@ -20,26 +23,26 @@
       when: notification_channel == "mail"
 
     - name: "Install pushbullet library"
-      pip: 
+      ansible.builtin.pip:
         name: pushbullet.py
       when: notification_channel == "pushbullet"
-    
+
     - name: "Notification by pushbullet"
-      pushbullet:
+      community.general.pushbullet:
         api_key: "{{ pushbullet_api_key }}"
         device: "{{ pushbullet_device }}"
         title: "Notification from {{ ansible_fqdn }}"
       when: notification_channel == "pushbullet"
-    
+
     - name: "Notification by pushover"
-      pushover:
+      community.general.pushover:
         msg: "Notification from {{ ansible_fqdn }}"
         app_token: ""
         user_key: ""
-      when: notification_channel == "pushover" 
+      when: notification_channel == "pushover"
 
-    - name: Enviar notificacion a Rocket Chat
-      rocketchat:
+    - name: Notification by Rocket Chat
+      community.general.rocketchat:
         token: ""
         domain: ""
         channel: ""
@@ -47,9 +50,9 @@
         protocol: http
       delegate_to: localhost
       when: notification_channel == "rocketchat"
-    
-    - name: Enviar notificacion a Slack
-      slack:
+
+    - name: Notification by Slack
+      community.general.slack:
         token: "{{ slack_token }}"
         channel: "{{ slack_channel }}"
         msg: '{{ inventory_hostname }} completed'

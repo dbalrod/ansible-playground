@@ -1,9 +1,11 @@
+---
 - name: Create file using variables
-  hosts: all
-  vars: 
-    - myip: "1.2.3.4"
+  hosts: all:!localhost
+  vars:
+    myip: "1.2.3.4"
   tasks:
     - name: Create hosts file
-      template: 
-        src: templates/variables/hosts.j2 
+      ansible.builtin.template:
+        src: templates/variables/hosts.j2
         dest: /tmp/hosts
+        mode: 0644

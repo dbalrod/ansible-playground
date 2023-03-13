@@ -3,7 +3,7 @@
   become: true
   tasks:
     - name: Update cache in debian family servers
-      ansible.builtin.apt: 
+      ansible.builtin.apt:
         update_cache: true
-        name: lftp 
+        name: lftp
         state: present
