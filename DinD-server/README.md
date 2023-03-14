@@ -10,7 +10,7 @@ docker build --build-arg DIND_USER=$USER -t dind-server .
 ## How to run Docker in Docker container
 
 ```bash
-docker run --privileged -d --name dind-server -h dind --net ansible-net dind-server
+docker run --privileged -d --name dind-server -h dind --net ansible-net -p 9900-9999:9900-9999 dind-server
 ```
 
 ## How to add ansible's public key
