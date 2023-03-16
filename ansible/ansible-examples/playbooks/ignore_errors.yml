@@ -4,7 +4,7 @@
     - name: Run uptime command
       ansible.builtin.command: uptime
       register: output
-      changed_when: my_output.rc == 0 # TODO: Test this change
+      changed_when: output.rc == 0
       ignore_errors: true
 
     - name: Show registered variable when command run successfully
@@ -15,7 +15,7 @@
     - name: Run command that returns error
       ansible.builtin.command: uptime --error
       register: output
-      changed_when: my_output.rc != 0 # TODO: Test this change
+      changed_when: output.rc != 0
       ignore_errors: true
 
     - name: Show registered variable when command failed

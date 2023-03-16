@@ -1,6 +1,5 @@
 - name: First playbook
-  hosts: apt:!ubuntu # TODO: Test on ubuntu
-#  become: true
+  hosts: apt
   tasks:
     - name: Install vim
       ansible.builtin.apt:
@@ -8,7 +7,7 @@
         state: present
       become: true
     - name: Include tasks
-      ansible.builtin.include_tasks: include_apache2_tasks.yml # TODO: Test this change
+      ansible.builtin.include_tasks: tasks/include_apache2_tasks.yml
 
 - name: Import playbook
   import_playbook: install_lftp_package.yml

@@ -1,6 +1,6 @@
 ---
 - name: Update sshd config (sshd_config)
-  hosts: all:!localhost:!apk:!centoses
+  hosts: apt:rhels
   tasks:
     - name: Copy config file
       ansible.builtin.copy:
@@ -25,5 +25,5 @@
         name: sshd
         state: restarted
       become: true
-      when: inventory_hostname in (groups["rhels"] + groups["rockies"]) | unique
+      when: inventory_hostname in groups["yum"]
 ...

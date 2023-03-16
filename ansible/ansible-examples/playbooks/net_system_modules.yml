@@ -5,23 +5,9 @@
     - name: Show current hostname
       ansible.builtin.debug:
         var: ansible_hostname
-    - name: Change hostname
-      become: true
-      ansible.builtin.hostname:
-        name: "{{ inventory_hostname }}-new6"
-      # TODO: No funciona el cambio de nombre pero tampoco da error en ubuntu
-      # parece que solo funciona en alpine con --cap-add=SYS_ADMIN
-      # TODO: Test if hostname works
 
     - name: Ping remote host
       ansible.builtin.ping:
-
-    - name: Gather variables from remote host
-      ansible.builtin.setup:
-
-    - name: Show modified hostname
-      ansible.builtin.debug:
-        var: ansible_hostname
 
     - name: Install iptables
       become: true
@@ -40,7 +26,7 @@
 
     - name: Allow ip forwarding
       become: true
-      ansible.posix.sysctl: # TODO: Test this change
+      ansible.posix.sysctl:
         name: net.ipv4.ip_forward
         value: 1
         state: present
