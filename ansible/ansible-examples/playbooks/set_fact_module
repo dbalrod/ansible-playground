@@ -1,8 +1,0 @@
-- hosts: all
-  tasks:
-    - name: Setting fact
-      set_fact: 
-        hostname: "{{ ansible_hostname | upper }}"
-    - name: Showing fact
-      debug: 
-        var: hostname

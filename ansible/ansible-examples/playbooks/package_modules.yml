@@ -2,61 +2,67 @@
   hosts: yum:apt
   become: true
   tasks:
-   
-    - block:
-      - name: Install gcc
-        ansible.builtin.yum: 
-          name: gcc 
-          state: present
-      - name: Install cpanm
-        ansible.builtin.yum: 
-          name: perl-App-cpanminus 
-          state: present
-      - name: Install DBI
-        community.general.cpanm: 
-          name: DBI 
+
+    - name: Install gcc, cpanm and DBI on Red Hat family servers
       when: inventory_hostname in groups["yum"]
+      block:
+        - name: Install gcc
+          ansible.builtin.yum:
+            name: gcc
+            state: present
+        - name: Install cpanm
+          ansible.builtin.yum:
+            name: perl-App-cpanminus
+            state: present
+        - name: Install DBI
+          community.general.cpanm:
+            name: DBI
 
     - name: Check if pip is already installed
       ansible.builtin.command: "pip3 --version"
       ignore_errors: true
       register: pip_is_installed
       changed_when: false
-    - block:
-      - name: Download get-pip.py
-        ansible.builtin.get_url: url=https://bootstrap.pypa.io/get-pip.py  dest=/tmp    
-      - name: Install pip
-        ansible.builtin.command: "python3 /tmp/get-pip.py"
-        register: myoutput
-        changed_when: myoutput.rc == 0
-        failed_when: myoutput.rc != 0
-      - name: Delete get-pip.py
-        ansible.builtin.file: 
-          state: absent 
-          path: /tmp/get-pip.py
-      when: pip_is_installed.rc !=0
+
+    - name: Install pip if it is not installed
+      when: pip_is_installed.rc != 0
+      block:
+        - name: Download get-pip.py
+          ansible.builtin.get_url:
+            url: https://bootstrap.pypa.io/get-pip.py
+            dest: /tmp
+            mode: 0755
+        - name: Install pip
+          ansible.builtin.command: "python3 /tmp/get-pip.py"
+          register: myoutput
+          changed_when: myoutput.rc == 0
+          failed_when: myoutput.rc != 0
+        - name: Delete get-pip.py
+          ansible.builtin.file:
+            state: absent
+            path: /tmp/get-pip.py
 
     - name: Install request module
-      ansible.builtin.pip: 
-        name: requests 
-        state: latest
+      ansible.builtin.pip:
+        name: requests
+        state: present
 
     - name: Update packages list
       ansible.builtin.apt:
         update_cache: true
         force_apt_get: true
-        lock_timeout: 10  
+        lock_timeout: 10
       when: inventory_hostname in groups['apt']
     - name: Update packages
-      ansible.builtin.apt: 
+      ansible.builtin.apt:
         upgrade: dist
       when: inventory_hostname in groups['apt']
     - name: Install nginx and gnupg
-      ansible.builtin.apt: 
-        name: 
-          - nginx 
+      ansible.builtin.apt:
+        name:
+          - nginx
           - gnupg
-        state: latest
+        state: present
       when: inventory_hostname in groups['apt']
     - name: Add google's apt key
       ansible.builtin.apt_key:
@@ -69,35 +75,35 @@
         state: present
         filename: "google-chrome"
       when: inventory_hostname in groups['apt']
-      
+
     - name: Install vim
-      ansible.builtin.package: 
-        name: vim 
+      ansible.builtin.package:
+        name: vim
         state: present
 
-    - block:
-      - name: Install httpd
-        ansible.builtin.yum: 
-          name: httpd 
-          state: latest
-      - name: Update packages on Red Hat family servers
-        ansible.builtin.yum: 
-          name: '*' 
-          state: latest
-      - name: Install development tools
-        ansible.builtin.yum: 
-          name: "@Development Tools"
-          state: present
-      - name: Install epel repo key for Red Hat 8 family servers
-        ansible.builtin.rpm_key:
-          state: present
-          key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
-      - name: Activate EPEL
-        ansible.builtin.yum_repository: 
-          name: epel
-          description: EPEL YUM repo
-          state: present
-          baseurl:
-            - https://download.fedoraproject.org/pub/epel/$releasever/Everything/$basearch/
-      when: inventory_hostname in ( (groups["centoses"] + groups["rockies"]) | unique )
-        
+    - name: Update packages, install httpd, development tools, and epel repository on Red Hat 8 family servers
+      when: inventory_hostname in ((groups["centoses"] + groups["rockies"]) | unique)
+      block:
+        - name: Install httpd
+          ansible.builtin.yum:
+            name: httpd
+            state: present
+        - name: Update packages on Red Hat family servers
+          ansible.builtin.yum:
+            name: '*'
+            state: latest
+        - name: Install development tools
+          ansible.builtin.yum:
+            name: "@Development Tools"
+            state: present
+        - name: Install epel repo key for Red Hat 8 family servers
+          ansible.builtin.rpm_key:
+            state: present
+            key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+        - name: Activate EPEL
+          ansible.builtin.yum_repository:
+            name: epel
+            description: EPEL YUM repo
+            state: present
+            baseurl:
+              - https://download.fedoraproject.org/pub/epel/$releasever/Everything/$basearch/

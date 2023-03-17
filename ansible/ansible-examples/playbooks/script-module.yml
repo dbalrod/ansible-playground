@@ -1,14 +1,14 @@
 ---
 - name: Sample play to run a local script in a remote server
   become: true
-  hosts: all 
+  hosts: all
   tasks:
     - name: "Run a local script on remote servers"
       ansible.builtin.script: files/uname/uname.sh
       register: script_out
 
     - name: "Print script output"
-      debug:
+      ansible.builtin.debug:
         msg: "{{ script_out }}"
 
 - name: Other play to run a local script in a remote server
@@ -19,5 +19,5 @@
       register: script_out
 
     - name: "Print script output"
-      debug:
+      ansible.builtin.debug:
         msg: "{{ script_out }}"

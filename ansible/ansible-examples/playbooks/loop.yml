@@ -1,9 +1,9 @@
 - name: Loop example when running a tool on localhost that controls remote servers
   hosts: localhost
   vars:
-    - machines: 
-        - server1
-        - server2
+    machines:
+      - server1
+      - server2
   tasks:
     - name: Run local process to manage remote machines
       ansible.builtin.debug:

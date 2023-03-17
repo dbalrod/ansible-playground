@@ -3,6 +3,7 @@
 ## How to build Postgresql image
 
 ```bash
+export USER=ansible
 docker build --build-arg PSQL_USER=$USER -t postgres .
 ```
 ## How to run Postgresql

@@ -1,31 +1,32 @@
-- hosts: yum
+- name: Commands modules examples
+  hosts: yum
   become: true
   tasks:
     - name: Execute script
-      script: files/uname/uname.sh
+      ansible.builtin.script: files/uname/uname.sh
     - name: Install procps-ng
       ansible.builtin.package:
-        name: 
+        name:
           - procps-ng
           - passwd
         state: present
     - name: Execute commands in a shell
-      shell: uptime && uname -a
+      ansible.builtin.shell: uptime && uname -a
       args:
         chdir: /tmp
       register: myoutput
       changed_when: myoutput.rc != 0
     - name: Execute command if /tmp/run_command file does not exist
-      command: uname -a creates=/tmp/run_command
+      ansible.builtin.command: uname -a creates=/tmp/run_command
     - name: Execute command if /tmp/run_command file exists
-      command: uname -a removes=/tmp/run_command
+      ansible.builtin.command: uname -a removes=/tmp/run_command
     - name: Install pexpect
       ansible.builtin.pip:
         name: pexpect
         state: present
     - name: Execute a command and respond to prompt
-      expect: 
+      ansible.builtin.expect:
         command: passwd ansible
-        responses: 
+        responses:
           (?i)password: "4ns1bL3-2023"
       become: true
