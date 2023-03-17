@@ -8,6 +8,7 @@ debians
 centoses
 rockies
 rhels
+alpines
 
 [apt:children]
 debians
