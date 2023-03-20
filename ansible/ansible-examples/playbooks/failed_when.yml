@@ -1,5 +1,5 @@
 - name: Using failed_when when executing a command
-  hosts: all:!ubuntu # TODO: Test in ubuntu
+  hosts: servers
   tasks:
     - name: Install ip command on debian family servers
       ansible.builtin.apt:

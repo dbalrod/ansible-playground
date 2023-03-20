@@ -1,5 +1,5 @@
 - name: Install lftp package
-  hosts: apt:!ubuntu # FIXME: Run playbook on ubuntu successfully
+  hosts: apt
   become: true
   tasks:
     - name: Update cache in debian family servers

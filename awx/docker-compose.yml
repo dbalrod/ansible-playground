@@ -1,14 +1,22 @@
 version: '2'
+networks:
+  awx:
+    name: awx-net
+  ansible:
+    name: ansible-net
+    external: true
 services:
 
   web:
     image: ansible/awx:17.1.0
     container_name: awx_web
+    networks:
+      - awx
     depends_on:
       - redis
       - postgres
     ports:
-      - "80:8052"
+      - "8052:8052"
     hostname: awxweb
     user: root
     restart: unless-stopped
@@ -22,13 +30,16 @@ services:
       - "./src/conf/nginx.conf:/etc/nginx/nginx.conf:ro"
       - "./redis_socket:/var/run/redis/:rw"
     environment:
-      http_proxy: 
-      https_proxy: 
-      no_proxy: 
+      http_proxy:
+      https_proxy:
+      no_proxy:
 
   task:
     image: ansible/awx:17.1.0
     container_name: awx_task
+    networks:
+     - awx
+     - ansible
     depends_on:
       - redis
       - web
@@ -47,19 +58,21 @@ services:
       - "./redis_socket:/var/run/redis/:rw"
     environment:
       AWX_SKIP_MIGRATIONS: "1"
-      http_proxy: 
-      https_proxy: 
-      no_proxy: 
+      http_proxy:
+      https_proxy:
+      no_proxy:
       SUPERVISOR_WEB_CONFIG_PATH: '/etc/supervisord.conf'
 
   redis:
     image: redis
     container_name: awx_redis
+    networks:
+      - awx
     restart: unless-stopped
     environment:
-      http_proxy: 
-      https_proxy: 
-      no_proxy: 
+      http_proxy:
+      https_proxy:
+      no_proxy:
     command: ["/usr/local/etc/redis/redis.conf"]
     volumes:
       - "./src/conf/redis.conf:/usr/local/etc/redis/redis.conf:ro"
@@ -68,6 +81,8 @@ services:
   postgres:
     image: postgres:12
     container_name: awx_postgres
+    networks:
+      - awx
     restart: unless-stopped
     volumes:
       - "./pgdocker/12/data/:/var/lib/postgresql/data:Z"
@@ -75,9 +90,9 @@ services:
       POSTGRES_USER: awx
       POSTGRES_PASSWORD: awxpass
       POSTGRES_DB: awx
-      http_proxy: 
-      https_proxy: 
-      no_proxy: 
+      http_proxy:
+      https_proxy:
+      no_proxy:
 
 
 volumes:

@@ -91,7 +91,7 @@
         - name: Update packages on Red Hat family servers
           ansible.builtin.yum:
             name: '*'
-            state: present
+            state: latest
         - name: Install development tools
           ansible.builtin.yum:
             name: "@Development Tools"

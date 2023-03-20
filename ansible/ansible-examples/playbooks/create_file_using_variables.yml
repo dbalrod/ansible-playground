@@ -1,6 +1,6 @@
 ---
 - name: Create file using variables
-  hosts: all:!localhost
+  hosts: servers
   vars:
     myip: "1.2.3.4"
   tasks:
