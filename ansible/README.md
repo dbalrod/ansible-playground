@@ -17,7 +17,7 @@ docker network create ansible-net
 ## How to run ansible container
 
 ```bash
-docker run -t -d --net ansible-net -v $PWD/ansible-examples:/etc/ansible -w /etc/ansible --name ansible ansible
+docker run -t -d --net ansible-net -h ansible -v $PWD/ansible-examples:/etc/ansible -w /etc/ansible --name ansible ansible ash
 ```
 
 ## Test that ansible is correctly installed

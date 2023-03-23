@@ -1,4 +1,4 @@
-- name: Apache2 modules and config
+- name: Apache2 installation modules and config
   hosts: apt
   become: true
   tasks:

@@ -10,7 +10,7 @@ docker build --build-arg ALPINE_USER=$USER -t alpine-server .
 ## How to run alpine-server
 
 ```bash
-docker run -it -d --net ansible-net -h alpine --name alpine-server alpine-server
+docker run -it -d --net ansible-net --cap-add NET_ADMIN --cap-add SYS_ADMIN -h alpine --name alpine-server alpine-server
 ```
 
 ## How to add ansible's public key

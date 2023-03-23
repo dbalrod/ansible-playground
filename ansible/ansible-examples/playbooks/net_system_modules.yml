@@ -1,0 +1,34 @@
+- name: Network config system modules
+  hosts: alpines
+  gather_facts: true
+  tasks:
+    - name: Show current hostname
+      ansible.builtin.debug:
+        var: ansible_hostname
+
+    - name: Ping remote host
+      ansible.builtin.ping:
+
+    - name: Install iptables
+      become: true
+      ansible.builtin.package:
+        name:
+          - iptables
+        state: present
+    - name: Modify iptables rules
+      become: true
+      ansible.builtin.iptables:
+        chain: INPUT
+        source: 0.0.0.0
+        protocol: tcp
+        destination_port: 80
+        jump: ACCEPT
+
+    - name: Allow ip forwarding
+      become: true
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: 1
+        state: present
+        sysctl_set: true
+        reload: true

@@ -1,0 +1,10 @@
+- name: Register varible
+  hosts: all
+  tasks:
+    - name: Execute command and register output
+      ansible.builtin.command: cat /etc/hosts
+      register: output
+      changed_when: output.rc == 0
+    - name: Show variable
+      ansible.builtin.debug:
+        var: output.stdout_lines

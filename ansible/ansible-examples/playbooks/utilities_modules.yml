@@ -1,0 +1,41 @@
+- name: Utilities modules examples
+  hosts: yum
+  become: true
+  tasks:
+    - name: Including vars from file
+      ansible.builtin.include_vars: vars/include_variables.yml
+    - name: Including a role
+      ansible.builtin.include_role:
+        name: httpd
+    - name: Showing hostname and FQDN
+      ansible.builtin.debug:
+        msg: "Hostname {{ ansible_hostname }} y FQDN {{ ansible_fqdn }}"
+
+    - name: Install uptime command
+      ansible.builtin.yum:
+        name:
+          - procps-ng
+        state: present
+    - name: Registering output of command uptime
+      ansible.builtin.command: uptime
+      register: output
+      changed_when: output.rc == 0
+    - name: Showing output of registered command
+      ansible.builtin.debug:
+        var: output
+    - name: Pause task for 2 seconds maximum
+      ansible.builtin.pause:
+        prompt: "Check the APP"
+        seconds: 2
+
+      # TEST: ansible-playbook utilities_modules.yml --extra-vars '{"check_number": 110}'
+    - name: Check if number is between 0 and 100
+      ansible.builtin.assert:
+        msg: "Nunber should be between 0 and 100"
+        that:
+          - check_number <= 100
+          - check_number >  0
+    - name: Fail task if number is not 10
+      ansible.builtin.fail:
+        msg: "Number is not 10"
+      when: check_number != 10

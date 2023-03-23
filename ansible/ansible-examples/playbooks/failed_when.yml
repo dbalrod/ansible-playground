@@ -1,0 +1,20 @@
+- name: Using failed_when when executing a command
+  hosts: all
+  tasks:
+    - name: Install ip command on debian family servers
+      ansible.builtin.apt:
+        name: iproute2
+        state: present
+      when: inventory_hostname in groups["apt"]
+      become: true
+    - name: Install ip command on not Red Hat family servers
+      ansible.builtin.package:
+        name: iproute
+        state: present
+      when: inventory_hostname in groups["yum"]
+      become: true
+    - name: Get network interfaces
+      ansible.builtin.command: ip a
+      register: net_interfaces
+      failed_when: "'eth0' not in net_interfaces.stdout"
+      changed_when: false

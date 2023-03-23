@@ -1,0 +1,54 @@
+- name: Working with variables
+  hosts: localhost
+  connection: local
+  vars:
+    myip: "1.2.3.4"
+    mylist: ["apache2", "mariadb", "php5"]
+    mylist_inlines:
+      - apache2
+      - mariadb
+      - php5
+    mydict: {web: apache2, bd: mariadb, script: php5}
+    mydict_inlines:
+      web: apache2
+      bd: mariadb
+      script: php5
+    mytext: |
+      first line
+      second line
+      third line
+    mylongline: >
+      start of line
+      text
+      end of line
+  tasks:
+    - name: Showing variable myip
+      ansible.builtin.debug:
+        var: myip
+    - name: Showing variable mylist
+      ansible.builtin.debug:
+        var: mylist
+    - name: Showing variable mylist_inlines
+      ansible.builtin.debug:
+        var: mylist_inlines
+    - name: Showing variable mydict
+      ansible.builtin.debug:
+        var: mydict
+    - name: Showing variable mydict.web
+      ansible.builtin.debug:
+        var: mydict.web
+    - name: Showing variable mydict_inlines
+      ansible.builtin.debug:
+        var: mydict_inlines
+    - name: Showing variable mydict_inlines.web
+      ansible.builtin.debug:
+        var: mydict_inlines.web
+    - name: Showing variable mydict_inlines['web']
+      ansible.builtin.debug:
+        var: mydict_inlines['web']
+    - name: Showing variable mytext
+      ansible.builtin.debug:
+        var: mytext
+    - name: Showing variable mylongline
+      ansible.builtin.debug:
+        var: mylongline

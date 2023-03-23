@@ -1,0 +1,14 @@
+- name: Loop example when running a tool on localhost that controls remote servers
+  hosts: localhost
+  vars:
+    machines:
+      - server1
+      - server2
+  tasks:
+    - name: Run local process to manage remote machines
+      ansible.builtin.debug:
+        msg: "Running process on localhost that is doing somethin on {{ item }}"
+      loop:
+        "{{ machines }}"
+
+# ansible-playbook playbooks/loop.yml --extra-vars "@playbooks/files/loop/machines.json"

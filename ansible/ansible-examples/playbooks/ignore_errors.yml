@@ -1,0 +1,24 @@
+- name: Playbook para la clase de register
+  hosts: localhost
+  tasks:
+    - name: Run uptime command
+      ansible.builtin.command: uptime
+      register: output
+      changed_when: output.rc == 0
+      ignore_errors: true
+
+    - name: Show registered variable when command run successfully
+      ansible.builtin.debug:
+        var: output.stdout_lines
+      when: not output.failed
+
+    - name: Run command that returns error
+      ansible.builtin.command: uptime --error
+      register: output
+      changed_when: output.rc != 0
+      ignore_errors: true
+
+    - name: Show registered variable when command failed
+      ansible.builtin.debug:
+        var: output.stderr
+      when: output.failed

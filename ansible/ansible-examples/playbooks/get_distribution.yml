@@ -1,0 +1,16 @@
+---
+- name: Get OS distribution
+  hosts: all
+  gather_facts: true
+  become: false
+  tasks:
+    - name: Distribution
+      ansible.builtin.debug:
+        msg: "{{ ansible_distribution }}"
+    - name: Distribution version
+      ansible.builtin.debug:
+        msg: "{{ ansible_distribution_version }}"
+    - name: Distribution major version
+      ansible.builtin.debug:
+        msg: "{{ ansible_distribution_major_version }}"
+...

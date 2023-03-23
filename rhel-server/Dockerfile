@@ -1,7 +1,7 @@
 FROM redhat/ubi9:9.1
 ARG RHEL_USER
 RUN yum update \ 
-    && yum install -y openssh-clients openssh-server sudo python3 \
+    && yum install -y openssh-clients openssh-server sudo python3 python3-pip \
     && yum clean all \
     && mkdir /run/sshd \
     && ssh-keygen -A \
