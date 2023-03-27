@@ -1,5 +1,5 @@
 - name: Register varible
-  hosts: all
+  hosts: servers
   tasks:
     - name: Execute command and register output
       ansible.builtin.command: cat /etc/hosts

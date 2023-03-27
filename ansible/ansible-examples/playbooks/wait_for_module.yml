@@ -1,5 +1,5 @@
 - name: Wait_for module examples
-  hosts: all:!localhost
+  hosts: servers
   tasks:
     - name: Wait for port 22 to be opened
       ansible.builtin.wait_for:

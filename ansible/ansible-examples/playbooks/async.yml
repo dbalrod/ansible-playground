@@ -1,5 +1,5 @@
 - name: Async example
-  hosts: all
+  hosts: servers
   tasks:
     - name: Main task
       ansible.builtin.command: sleep 15
