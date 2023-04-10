@@ -1,5 +1,5 @@
 - name: Package modules examples
-  hosts: yum:apt
+  hosts: apt:yum:&servers
   become: true
   tasks:
 
@@ -96,6 +96,8 @@
           ansible.builtin.yum:
             name: "@Development Tools"
             state: present
+# Info about EPEL repo: https://docs.fedoraproject.org/en-US/epel/#Quickstart
+#                       https://mirrors.xtom.de/epel/
         - name: Install epel repo key for Red Hat 8 family servers
           ansible.builtin.rpm_key:
             state: present

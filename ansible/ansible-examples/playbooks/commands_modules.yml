@@ -3,7 +3,7 @@
   become: true
   tasks:
     - name: Execute script
-      ansible.builtin.script: files/uname/uname.sh
+      ansible.builtin.script: uname/uname.sh
     - name: Install procps-ng
       ansible.builtin.package:
         name:

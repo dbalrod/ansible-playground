@@ -1,6 +1,6 @@
 - name: Copy files in directory playbook
   gather_facts: false
-  hosts: servers
+  hosts: servers:localhost
   tasks:
     - name: Ensures /tmp/source dir exists
       ansible.builtin.file:
