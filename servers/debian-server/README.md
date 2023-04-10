@@ -19,7 +19,7 @@ docker run -it -d --net ansible-net -h debian --name debian-server debian-server
 docker exec -t debian-server sh -c "mkdir -p /home/$USER/.ssh && echo '$(docker exec -t ansible cat /home/ansible/.ssh/ssh_host_ed25519_key.pub)' > /home/$USER/.ssh/authorized_keys"
 ```
 
-## How to log into ubuntu-server
+## How to log into debian-server
 
 ```bash
 docker exec -it -u $USER -w /home/$USER debian-server bash
