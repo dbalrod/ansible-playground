@@ -3,7 +3,7 @@
   connection: localhost
   vars:
     notification_channel: "mail"
-    email_address:
+    email_address: email-address@change.me
     pushbullet_api_key:
     pushbullet_device:
     slack_token:
