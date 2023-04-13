@@ -28,7 +28,7 @@ services:
       args:
         - ALPINE_USER=ansible
     image: alpine-server:latest
-    #container_name: alpine-server
+    container_name: alpine-server
     hostname: alpine
     networks:
       - ansible-net
@@ -43,7 +43,7 @@ services:
       args:
         - CENTOS_USER=ansible
     image: centos-server:latest
-    #container_name: centos-server
+    container_name: centos-server
     hostname: centos
     networks:
       - ansible-net
@@ -60,7 +60,7 @@ services:
       args:
         - RHEL_USER=ansible
     image: rhel-server:latest
-    #container_name: rhel-server
+    container_name: rhel-server
     hostname: rhel
     networks:
       - ansible-net
@@ -77,7 +77,7 @@ services:
       args:
         - ROCKY_USER=ansible
     image: rockylinux-server:latest
-    #container_name: rockylinux-server
+    container_name: rockylinux-server
     hostname: rockylinux
     networks:
       - ansible-net
@@ -94,7 +94,7 @@ services:
       args:
         - DEBIAN_USER=ansible
     image: debian-server:latest
-    #container_name: debian-server
+    container_name: debian-server
     hostname: debian
     networks:
       - ansible-net
@@ -106,7 +106,7 @@ services:
       args:
         - UBUNTU_USER=ansible
     image: ubuntu-server:latest
-    #container_name: ubuntu-server
+    container_name: ubuntu-server
     hostname: ubuntu
     networks:
       - ansible-net
@@ -118,7 +118,7 @@ services:
       args:
         - DIND_USER=ansible
     image: dind-server:latest
-    #container_name: dind-server
+    container_name: dind-server
     hostname: dind
     networks:
       - ansible-net
@@ -131,7 +131,7 @@ services:
       args:
         - INFLUXDB_USER=ansible
     image: influxdb:latest
-    #container_name: influxdb-db
+    container_name: influxdb-db
     hostname: influxdb
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
@@ -156,7 +156,7 @@ services:
       args:
         - MONGO_USER=ansible
     image: mongo:latest
-    #container_name: mongo-db
+    container_name: mongo-db
     hostname: mongo
     networks:
       - ansible-net
@@ -168,7 +168,7 @@ services:
       args:
         - MYSQL_USER=ansible
     image: mysql:latest
-    #container_name: mysql-db
+    container_name: mysql-db
     hostname: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=my-secret-pw    
@@ -182,7 +182,7 @@ services:
       args:
         - PSQL_USER=ansible
     image: postgres:latest
-    #container_name: postgres-db
+    container_name: postgres-db
     hostname: postgres
     environment:
       - POSTGRES_PASSWORD=my-secret-pw
