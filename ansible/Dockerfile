@@ -1,7 +1,7 @@
 FROM alpine:3
 ARG ANSIBLE_USER
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
-RUN apk update && apk add --no-cache python3 py3-pip vim openssh sshpass iputils sudo postfix \
+RUN apk update && apk add --no-cache python3 py3-pip vim openssh sshpass iputils sudo postfix git \
     && rm  -rf /tmp/* /var/cache/apk/* \
     && adduser ansible -u "5000" --disabled-password \
     && echo "$ANSIBLE_USER:$(date +%s | sha256sum | base64 | head -c 32)"|chpasswd \

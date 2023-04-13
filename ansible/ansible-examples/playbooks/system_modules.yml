@@ -1,6 +1,6 @@
 ---
 - name: System modules
-  hosts: apt:yum
+  hosts: apt:yum:&servers
   become: true
   vars:
     java_apt_packages:

@@ -1,5 +1,5 @@
 - name: Lookup example
-  hosts: servers
+  hosts: servers:localhost
   tasks:
     - name: Lookup a file
       ansible.builtin.debug:
@@ -39,22 +39,23 @@
           - dnspython
         state: present
       become: true
-
+      when: inventory_hostname == 'localhost'
+    
     - name: Dig URL
       ansible.builtin.debug:
-        msg: "{{ lookup('dig', 'www.google.com') }}"
+        msg: "{{ lookup('community.general.dig', 'www.google.com') }}"
 
     - name: Dig MX record
       ansible.builtin.debug:
-        msg: "{{ lookup('dig', 'google.com/MX') }}"
+        msg: "{{ lookup('community.general.dig', 'google.com/MX') }}"
 
     - name: Another way to dig MX record
       ansible.builtin.debug:
-        msg: "{{ lookup('dig', 'google.com', 'qtype=MX') }}"
+        msg: "{{ lookup('community.general.dig', 'google.com', 'qtype=MX') }}"
 
     - name: Full MX records list
       ansible.builtin.debug:
-        msg: "{{ lookup('dig', 'google.com/MX', wantlist=true) }}"
+        msg: "{{ lookup('community.general.dig', 'google.com/MX', wantlist=true) }}"
 
     - name: Get env variable
       ansible.builtin.debug:
