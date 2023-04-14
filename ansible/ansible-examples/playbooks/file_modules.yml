@@ -1,5 +1,5 @@
 - name: Ejemplos de modulos de ficheros y openssl
-  hosts: yum # TODO: Test in all servers (-v /run/systemd/journal/socket:/run/systemd/journal/socket)
+  hosts: yum
   tasks:
     - name: Create a file with the defined content
       ansible.builtin.copy:
@@ -19,7 +19,7 @@
         path: "/var/log/journal"
         state: directory
         owner: root
-        mode: "2755" # TODO: Test if mode as string ("2755" instead of 2755) works
+        mode: "2755"
       notify: Restart_journald
 
     - name: Module stat

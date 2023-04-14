@@ -2,19 +2,16 @@
   hosts: localhost
   connection: localhost
   vars:
-    notification_channel: "mail" # FIXME Test Slack and mail
-    email_address: "omrfloppy@gmail.com"
-    pushbullet_api_key: "o.2FbEyW4nyV2MHN2qdJcaqTIbNs509VfQ"
-    pushbullet_device: "Realme"
-    slack_token: "TAGRYDVGR/BAHLKF9SR/Xp9bqbsqLnqB5BmJxwigdUNo"
-    slack_channel: "#general"
+    notification_channel: "mail"
+    email_address: email-address@change.me
+    pushbullet_api_key:
+    pushbullet_device:
+    slack_token:
+    slack_channel:
   tasks:
-# TODO: docker run -d --rm --init \
-#       --env POSTFIX_SMTP_HELO_NAME=localhost --env=POSTFIX_MYORIGIN=localhost --env=POSTFIX_MYHOSTNAME=localhost
-#       --name postfix --net ansible-net postfix:latest
     - name: "Notification by email"
       community.general.mail:
-        host: postfix
+        host: 127.0.0.1
         to: "{{ email_address }}"
         sender: root@localhost
         subject: "Task finished"

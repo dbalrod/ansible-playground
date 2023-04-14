@@ -1,5 +1,5 @@
 - name: Set_fact module example
-  hosts: all
+  hosts: servers
   tasks:
     - name: Setting fact
       ansible.builtin.set_fact:

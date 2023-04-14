@@ -1,0 +1,8 @@
+---
+- name: Use role from github
+  hosts: apt
+  become: true
+  roles:
+    - role: time
+
+# ansible-galaxy install -r playbooks/roles/requirements.yml

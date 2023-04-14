@@ -1,6 +1,6 @@
 ---
 - name: System modules
-  hosts: apt:yum
+  hosts: apt:yum:&servers
   become: true
   vars:
     java_apt_packages:
@@ -44,8 +44,12 @@
       when: inventory_hostname in groups["yum"]
       community.general.alternatives:
         name: java
-        path: /usr/lib/jvm/{{ hostvars\[inventory_hostname].java11path.stdout }}/bin/java
+        path: "/usr/lib/jvm/{{ hostvars[inventory_hostname].java11path.stdout }}/bin/java"
 
+    - name: Install tzdata
+      ansible.builtin.package:
+        name: tzdata
+        state: present
     - name: Configure timezone
       community.general.timezone:
         name: "Europe/Madrid"
