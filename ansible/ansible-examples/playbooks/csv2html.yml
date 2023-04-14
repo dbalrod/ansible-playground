@@ -1,0 +1,18 @@
+- name: CSV to html
+  hosts: localhost
+  tasks:
+    - name: Load CSV Data into object
+      community.general.read_csv:
+        path: 'files/lookup/test.csv'
+        #fieldnames: col1,col2,col3
+        delimiter: ','
+      register: csv_data
+
+    - name: Show filled file from template
+      ansible.builtin.debug:
+        msg: "{{ lookup('template', 'files/csv/table.html.j2') }}"
+      
+    - name: Create html table from csv data
+      ansible.builtin.template:
+        src: files/csv/table.html.j2
+        dest: /tmp/table.html
