@@ -1,0 +1,190 @@
+version: "3.9"
+
+networks:
+  ansible-net:
+    name: ansible-net
+
+services:
+  ansible:
+    build:
+      context: ./ansible
+      dockerfile: Dockerfile
+      args:
+        - ANSIBLE_USER=ansible
+    image: ansible:latest
+    container_name: ansible
+    hostname: ansible
+    networks:
+      - ansible-net
+    volumes:
+      - $PWD/ansible/ansible-examples:/etc/ansible
+    working_dir: /etc/ansible
+    command: sleep infinity
+  
+  alpine-server:
+    build:
+      context: ./servers/alpine-server
+      dockerfile: Dockerfile
+      args:
+        - ALPINE_USER=ansible
+    image: alpine-server:latest
+    container_name: alpine-server
+    hostname: alpine
+    networks:
+      - ansible-net
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+
+  centos-server:
+    build:
+      context: ./servers/centos-server
+      dockerfile: Dockerfile
+      args:
+        - CENTOS_USER=ansible
+    image: centos-server:latest
+    container_name: centos-server
+    hostname: centos
+    networks:
+      - ansible-net
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    cgroup_parent: host
+    cap_add:
+      - SYS_ADMIN
+ 
+  rhel-server:
+    build:
+      context: ./servers/rhel-server
+      dockerfile: Dockerfile
+      args:
+        - RHEL_USER=ansible
+    image: rhel-server:latest
+    container_name: rhel-server
+    hostname: rhel
+    networks:
+      - ansible-net
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    cgroup_parent: host
+    cap_add:
+      - SYS_ADMIN
+
+  rockylinux-server:
+    build:
+      context: ./servers/rockylinux-server
+      dockerfile: Dockerfile
+      args:
+        - ROCKY_USER=ansible
+    image: rockylinux-server:latest
+    container_name: rockylinux-server
+    hostname: rockylinux
+    networks:
+      - ansible-net
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    cgroup_parent: host
+    cap_add:
+      - SYS_ADMIN
+
+  debian-server:
+    build:
+      context: ./servers/debian-server
+      dockerfile: Dockerfile
+      args:
+        - DEBIAN_USER=ansible
+    image: debian-server:latest
+    container_name: debian-server
+    hostname: debian
+    networks:
+      - ansible-net
+  
+  ubuntu-server:
+    build:
+      context: ./servers/ubuntu-server
+      dockerfile: Dockerfile
+      args:
+        - UBUNTU_USER=ansible
+    image: ubuntu-server:latest
+    container_name: ubuntu-server
+    hostname: ubuntu
+    networks:
+      - ansible-net
+
+  dind-server:
+    build:
+      context: ./servers/dind-server
+      dockerfile: Dockerfile
+      args:
+        - DIND_USER=ansible
+    image: dind-server:latest
+    container_name: dind-server
+    hostname: dind
+    networks:
+      - ansible-net
+    privileged: true
+
+  influxdb-db:
+    build:
+      context: ./servers/influxdb-db
+      dockerfile: Dockerfile
+      args:
+        - INFLUXDB_USER=ansible
+    image: influxdb:latest
+    container_name: influxdb-db
+    hostname: influxdb
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=my-user
+      - DOCKER_INFLUXDB_INIT_PASSWORD=my-password
+      - DOCKER_INFLUXDB_INIT_ORG=my-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=my-bucket
+      - DOCKER_INFLUXDB_INIT_RETENTION=1w
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+    networks:
+      - ansible-net
+    ports:
+      - 8086:8086
+    volumes:
+      - $PWD/data:/var/lib/influxdb2
+      - $PWD/config:/etc/influxdb2
+    
+  mongo-db:
+    build:
+      context: ./servers/mongo-db
+      dockerfile: Dockerfile
+      args:
+        - MONGO_USER=ansible
+    image: mongo:latest
+    container_name: mongo-db
+    hostname: mongo
+    networks:
+      - ansible-net
+
+  mysql-db:
+    build:
+      context: ./servers/mysql-db
+      dockerfile: Dockerfile
+      args:
+        - MYSQL_USER=ansible
+    image: mysql:latest
+    container_name: mysql-db
+    hostname: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw    
+    networks:
+      - ansible-net
+  
+  postgres-db:
+    build:
+      context: ./servers/postgresql-db
+      dockerfile: Dockerfile
+      args:
+        - PSQL_USER=ansible
+    image: postgres:latest
+    container_name: postgres-db
+    hostname: postgres
+    environment:
+      - POSTGRES_PASSWORD=my-secret-pw
+    networks:
+      - ansible-net

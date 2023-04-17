@@ -1,0 +1,71 @@
+localhost ansible_connection=local ansible_user=ansible
+
+# Servers
+
+[servers:children]
+ubuntus
+debians
+centoses
+rockies
+rhels
+alpines
+
+[apt:children]
+debians
+ubuntus
+mysqls
+mongos
+
+[ubuntus]
+ubuntu ansible_user=ansible
+
+[debians]
+debian ansible_user=ansible
+
+[yum:children]
+centoses
+rockies
+rhels
+
+[centoses]
+centos ansible_user=ansible
+
+[rockies]
+rockylinux ansible_user=ansible
+
+[rhels]
+rhel ansible_user=ansible
+
+[apk:children]
+alpines
+dockers
+influxdbs
+postgreses
+
+[alpines]
+alpine ansible_user=ansible
+
+# Containers
+
+[dockers]
+dind ansible_user=ansible
+
+# Databases
+
+[dbs:children]
+mysqls
+postgreses
+mongos
+influxdbs
+
+[mysqls]
+mysql ansible_user=ansible
+
+[postgreses]
+postgres ansible_user=ansible
+
+[mongos]
+mongo ansible_user=ansible
+
+[influxdbs]
+influxdb ansible_user=ansible

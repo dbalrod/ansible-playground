@@ -1,0 +1,38 @@
+- name: VCS modules
+  hosts: localhost
+  tasks:
+    - name: Install git
+      community.general.apk:
+        name: git
+        state: present
+      become: true
+    - name: Download ansible examples from a git repository
+      ansible.builtin.git:
+        repo: https://github.com/ansible/ansible-examples.git
+        dest: /tmp/ansible-examples/
+        version: b505865
+    - name: Config vim as editor in git
+      community.general.git_config:
+        name: core.editor
+        value: vim
+        scope: global
+
+    - name: Install hg
+      community.general.apk:
+        name: mercurial
+        state: present
+      become: true
+    - name: Download a hg repository
+      community.general.hg:
+        repo: https://www.selenic.com/repo/hello
+        dest: /tmp/hg/
+
+    - name: Install svn
+      community.general.apk:
+        name: subversion
+        state: present
+      become: true
+    - name: Download a svn repository
+      ansible.builtin.subversion:
+        repo: https://develop.svn.wordpress.org/trunk/src/
+        dest: /tmp/wordpress/

@@ -1,0 +1,9 @@
+- name: Set_fact module example
+  hosts: servers
+  tasks:
+    - name: Setting fact
+      ansible.builtin.set_fact:
+        hostname: "{{ ansible_hostname | upper }}"
+    - name: Showing fact
+      ansible.builtin.debug:
+        var: hostname

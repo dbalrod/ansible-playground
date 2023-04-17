@@ -1,0 +1,103 @@
+---
+- name: System modules
+  hosts: apt:yum:&servers
+  become: true
+  vars:
+    java_apt_packages:
+      - openjdk-17-jdk
+      - openjdk-11-jdk
+    java_yum_packages:
+      - java-1.8.0-openjdk
+      - java-11-openjdk
+  tasks:
+
+    - name: Install Java packages 17 and 11 (Ubuntu/Debian)
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      loop:
+        "{{ java_apt_packages }}"
+      when: ansible_os_family == 'Debian'
+    - name: Install Java packages 8 and 11 (CentOS/RHEL)
+      ansible.builtin.yum:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      loop:
+        "{{ java_yum_packages }}"
+      when: ansible_os_family == 'RedHat'
+
+    - name: Use Java 11
+      community.general.alternatives:
+        name: java
+        path: /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+      when: inventory_hostname in groups["apt"]
+
+    - name: Get Java 11 path
+      ansible.builtin.shell: |
+        set -o pipefail
+        ls /usr/lib/jvm/ | grep java-11-openjdk-11* | tail -n 1
+      register: java11path
+      when: inventory_hostname in groups["yum"]
+    - name: Use Java 11
+      when: inventory_hostname in groups["yum"]
+      community.general.alternatives:
+        name: java
+        path: "/usr/lib/jvm/{{ hostvars[inventory_hostname].java11path.stdout }}/bin/java"
+
+    - name: Install tzdata
+      ansible.builtin.package:
+        name: tzdata
+        state: present
+    - name: Configure timezone
+      community.general.timezone:
+        name: "Europe/Madrid"
+
+    - name: Adding a new user
+      ansible.builtin.user:
+        name: jboss
+        uid: 185
+        home: /tmp
+        shell: /bin/false
+        state: present
+    - name: Adding a new group
+      ansible.builtin.group:
+        name: jboss
+        state: present
+        gid: 185
+
+    - name: Adding ansible's pub key to root user
+      ansible.posix.authorized_key:
+        user: root
+        key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdfIkZ9kYfdcnjwHnFDDJHx88oP+i21uRpqbsleVWxd ansible@buildkitsandbox"
+
+    - name: Install cron
+      ansible.builtin.apt:
+        name: cron
+        state: present
+      when: inventory_hostname in groups["apt"]
+    - name: Install cronie
+      ansible.builtin.yum:
+        name: cronie
+        state: present
+      when: inventory_hostname in groups["yum"]
+
+    - name: Ensures /root/scripts/ dir exists
+      ansible.builtin.file:
+        path: "/root/scripts"
+        state: directory
+        mode: 0640
+    - name: Copy backup file
+      ansible.builtin.template:
+        src: templates/system_modules/backup.sh.j2
+        dest: "/root/scripts/backup.sh"
+        mode: 0750
+    - name: Schedule backup
+      ansible.builtin.cron:
+        name: "Do backup"
+        hour: 2
+        minute: 0
+        job: "/root/scripts/backup.sh"
+        cron_file: do_backup
+        user: root

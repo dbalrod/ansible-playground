@@ -1,0 +1,57 @@
+- name: Notifications examples
+  hosts: localhost
+  connection: localhost
+  vars:
+    notification_channel: "mail"
+    email_address: email-address@change.me
+    pushbullet_api_key:
+    pushbullet_device:
+    slack_token:
+    slack_channel:
+  tasks:
+    - name: "Notification by email"
+      community.general.mail:
+        host: 127.0.0.1
+        to: "{{ email_address }}"
+        sender: root@localhost
+        subject: "Task finished"
+        body: "Task finished {{ ansible_fqdn }}"
+      delegate_to: localhost
+      when: notification_channel == "mail"
+
+    - name: "Install pushbullet library"
+      ansible.builtin.pip:
+        name: pushbullet.py
+      when: notification_channel == "pushbullet"
+
+    - name: "Notification by pushbullet"
+      community.general.pushbullet:
+        api_key: "{{ pushbullet_api_key }}"
+        device: "{{ pushbullet_device }}"
+        title: "Notification from {{ ansible_fqdn }}"
+      when: notification_channel == "pushbullet"
+
+    - name: "Notification by pushover"
+      community.general.pushover:
+        msg: "Notification from {{ ansible_fqdn }}"
+        app_token: ""
+        user_key: ""
+      when: notification_channel == "pushover"
+
+    - name: Notification by Rocket Chat
+      community.general.rocketchat:
+        token: ""
+        domain: ""
+        channel: ""
+        msg: "{{ inventory_hostname }} completed"
+        protocol: http
+      delegate_to: localhost
+      when: notification_channel == "rocketchat"
+
+    - name: Notification by Slack
+      community.general.slack:
+        token: "{{ slack_token }}"
+        channel: "{{ slack_channel }}"
+        msg: '{{ inventory_hostname }} completed'
+      delegate_to: localhost
+      when: notification_channel == "slack"

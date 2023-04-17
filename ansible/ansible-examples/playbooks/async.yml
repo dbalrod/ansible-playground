@@ -1,0 +1,21 @@
+- name: Async example
+  hosts: servers
+  tasks:
+    - name: Main task
+      ansible.builtin.command: sleep 15
+      async: 60
+      poll: 0
+      register: sleep_state
+      changed_when: false
+    - name: Secondary task
+      ansible.builtin.debug:
+        msg: "Secondary task"
+    - name: Another task
+      ansible.builtin.debug:
+        msg: "Another task"
+    - name: Wait for main task to finish
+      ansible.builtin.async_status:
+        jid: "{{ sleep_state.ansible_job_id }}"
+      register: state
+      until: state.finished
+      retries: 30

@@ -1,0 +1,14 @@
+- name: Wait_for module examples
+  hosts: servers
+  tasks:
+    - name: Wait for port 22 to be opened
+      ansible.builtin.wait_for:
+        port: 22
+        delay: 2
+    - name: Wait until file exists
+      ansible.builtin.wait_for:
+        path: /tmp/exists
+    - name: Wait until file does not exist
+      ansible.builtin.wait_for:
+        path: /tmp/exists
+        state: absent

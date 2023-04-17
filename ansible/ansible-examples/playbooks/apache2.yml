@@ -1,0 +1,70 @@
+- name: Apache2 installation modules and config
+  hosts: servers:&apt
+  become: true
+  tasks:
+    - name: Install apache2 and supervisor
+      ansible.builtin.apt:
+        name:
+          - apache2
+          - libapache2-mod-wsgi-py3
+          - supervisor
+        state: present
+        update_cache: true
+
+    - name: Start apache service
+      ansible.builtin.service:
+        name: apache2
+        state: started
+
+    - name: Enable apache service
+      ansible.builtin.service:
+        name: apache2
+        enabled: true
+
+    - name: Install wsgi module
+      community.general.apache2_module:
+        name: wsgi
+        state: present
+
+    - name: Install passlib and setuptools modules
+      ansible.builtin.pip:
+        name:
+          - passlib
+          - setuptools
+        state: present
+
+    - name: Set apache authentication
+      ansible.builtin.copy:
+        src: files/apache2/.htaccess
+        dest: /var/www/.htaccess
+        mode: 0400
+
+    - name: Create apache password
+      community.general.htpasswd:
+        name: myuser
+        path: /var/www/.htpasswd
+        password: mypassword
+        owner: www-data
+        mode: 0640
+
+    - name: Set supervisor config for apache
+      ansible.builtin.copy:
+        src: files/apache2/apache2.conf
+        dest: /etc/supervisor/conf.d/apache2.conf
+        mode: 0640
+
+    - name: Stop apache2 service
+      ansible.builtin.service:
+        name: apache2
+        state: stopped
+
+    - name: Enable supervisor
+      ansible.builtin.service:
+        name: supervisor
+        enabled: true
+        state: started
+
+    - name: Enable apache
+      community.general.supervisorctl:
+        name: apache2
+        state: started

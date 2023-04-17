@@ -1,0 +1,22 @@
+- name: Docker module
+  hosts: dind
+  become: true
+  tasks:
+    - name: Install docker library in python
+      ansible.builtin.pip:
+        name: docker
+        state: present
+
+    - name: Download an image
+      community.docker.docker_image:
+        name: alpine
+        source: pull
+        state: present
+
+    - name: Run a container
+      community.docker.docker_container:
+        name: mycontainer
+        state: started
+        detach: true
+        interactive: true
+        image: alpine

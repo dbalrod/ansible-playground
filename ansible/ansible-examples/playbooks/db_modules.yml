@@ -1,0 +1,80 @@
+---
+- name: Examples using db modules
+  hosts: dbs
+  tasks:
+    - name: Mysql
+      vars:
+        mysql_ansible_user: ansible
+      when: inventory_hostname in groups["mysqls"]
+      block:
+        - name: "MySQL - Copy my.cnf file with credentials"
+          ansible.builtin.copy:
+            src: files/db/mysql/my.cnf
+            dest: /home/{{ mysql_ansible_user }}/.my.cnf
+            mode: 0400
+        - name: Create DB
+          community.mysql.mysql_db:
+            name: newdb
+            state: present
+        - name: Backup DB
+          community.mysql.mysql_db:
+            name: all
+            state: dump
+            target: /tmp/{{ ansible_hostname }}.sql
+        - name: Adding a new user
+          community.mysql.mysql_user:
+            name: newuser
+            password: newpass
+            state: present
+            priv: "newdb.*:ALL"
+        - name: Deleting my.cnf
+          ansible.builtin.file:
+            dest: /home/{{ mysql_ansible_user }}/.my.cnf
+            state: absent
+
+    - name: PostgreSQL
+      become: true
+      become_user: root
+      when: inventory_hostname in groups["postgreses"]
+      block:
+        - name: New db in PostgreSQL
+          community.postgresql.postgresql_db:
+            name: newdb
+            state: present
+            encoding: UTF-8
+        - name: New user in PostgreSQL
+          community.postgresql.postgresql_user:
+            name: newuser
+            state: present
+            password: newpass
+            db: newdb
+            priv: ALL
+
+
+    - name: Mongo
+      when: inventory_hostname in groups["mongos"]
+      block:
+        - name: Install pymongo module
+          ansible.builtin.pip:
+            name: pymongo
+            state: present
+        - name: Create new mongodb user
+          community.mongodb.mongodb_user:
+            name: newuser
+            password: newpass
+            database: admin
+
+    - name: Influxdb
+      when: inventory_hostname in groups["influxdbs"]
+      block:
+        - name: Install module influxdb
+          ansible.builtin.pip:
+            name: influxdb
+            state: present
+        - name: Create influxdb database
+          community.general.influxdb_database:
+            database_name: newdb
+            state: present
+            hostname: influxdb
+            username: v1-user
+            password: v1-password

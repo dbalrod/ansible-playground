@@ -1,0 +1,22 @@
+---
+- name: Update sshd config (sshd_config)
+  hosts: apt
+  tasks:
+    - name: Copy config file
+      ansible.builtin.copy:
+        src: files/sshd/sshd_config
+        dest: /etc/ssh/sshd_config
+        mode: 0644
+        owner: ansible
+        group: ansible
+        backup: true
+      become: true
+      notify:
+        - Restart_ssh
+        - Restart_sshd
+  handlers:
+    - name: Restart_ssh
+      ansible.builtin.service:
+        name: ssh
+        state: restarted
+...
